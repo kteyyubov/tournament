@@ -6,13 +6,10 @@
 
 ###Application
 ```bash
-#1 Build and run
+#Build and run
 make
 
-#2 Run Migration
-make db-migrate
-
-#3 Load Fixtures
+#Load Fixtures
 make db-fixtures
 
 #Check other options
