@@ -29,3 +29,21 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\Domain\Service\Generator\QualificationGenerator:
+        tags:
+            - { name: 'service.generator', priority: 25 }
+    App\Domain\Service\Generator\QuarterfinalGenerator:
+        tags:
+            - { name: 'service.generator', priority: 20 }
+    App\Domain\Service\Generator\SemifinalGenerator:
+        tags:
+            - { name: 'service.generator', priority: 15 }
+    App\Domain\Service\Generator\BronzeMedalGameGenerator:
+        tags:
+            - { name: 'service.generator', priority: 10 }
+    App\Domain\Service\Generator\FinalGameGenerator:
+        tags:
+            - { name: 'service.generator', priority: 5 }
+
+    App\Domain\Service\Workflow\SixteenTeamsWorkflow:
+        arguments: [ !tagged_iterator service.generator ]

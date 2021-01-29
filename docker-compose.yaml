@@ -1,0 +1,48 @@
+version: "3.8"
+services:
+  server:
+    image: nginx:latest
+    container_name: server
+    restart: on-failure
+    ports:
+      - 8080:80
+    depends_on:
+      - app
+    volumes:
+      - .:/app:rw,cached
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    networks:
+      - symfony
+
+  app:
+    build: ./docker/php-fpm
+    container_name: app
+    restart: on-failure
+    working_dir: /app
+    depends_on:
+      - db
+    volumes:
+      - .:/app:rw,cached
+      - ./docker/php-fpm/local.ini:/usr/local/etc/php/conf.d/local.ini:ro
+    networks:
+      - symfony
+
+  db:
+    image: mysql:latest
+    container_name: db
+    restart: on-failure
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+    volumes:
+      - dbdata:/var/lib/mysql/
+    networks:
+      - symfony
+
+volumes:
+  dbdata:
+
+networks:
+  symfony:
